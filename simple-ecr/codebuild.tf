@@ -31,14 +31,57 @@ data "aws_iam_policy_document" "build" {
     effect = "Allow"
 
     actions = [
-      "logs:*",
-      "s3:*",
-      "ecr:*",
-      "codecommit:*"
+      "ecr:GetAuthorizationToken"
     ]
 
     resources = ["*"]
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:PutLogEvents",
+      "logs:CreateLogStream"
+    ]
+
+    resources = [
+      "${aws_cloudwatch_log_group.build.arn}:log-stream:*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject"
+    ]
+
+    resources = [
+      "${aws_s3_bucket.artifacts.arn}/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "ecr:CompleteLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:InitiateLayerUpload",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:PutImage"
+    ]
+
+    resources = [
+      aws_ecr_repository.repo.arn
+    ]
+  }
+}
+
+resource "aws_cloudwatch_log_group" "build" {
+  name = "${var.project_name}-build"
 }
 
 resource "aws_codebuild_project" "build" {
@@ -68,7 +111,7 @@ resource "aws_codebuild_project" "build" {
 
   logs_config {
     cloudwatch_logs {
-      group_name = "${var.project_name}-build"
+      group_name = aws_cloudwatch_log_group.build.name
     }
   }
 }

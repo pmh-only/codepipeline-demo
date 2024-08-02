@@ -22,14 +22,40 @@ data "aws_iam_policy_document" "pipeline" {
     effect = "Allow"
 
     actions = [
-      "kms:*",
-      "codecommit:*",
-      "codebuild:*",
-      "logs:*",
-      "s3:*"
+      "codecommit:GetBranch",
+      "codecommit:GetCommit",
+      "codecommit:UploadArchive",
+      "codecommit:GetUploadArchiveStatus"
     ]
 
-    resources = ["*"]
+    resources = [
+      aws_codecommit_repository.repo.arn
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:PutObject"
+    ]
+
+    resources = [
+      "${aws_s3_bucket.artifacts.arn}/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "codebuild:StartBuild",
+      "codebuild:BatchGetBuilds"
+    ]
+
+    resources = [
+      aws_codebuild_project.build.arn
+    ]
   }
 }
 

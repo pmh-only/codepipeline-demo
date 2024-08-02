@@ -18,12 +18,27 @@ data "aws_iam_policy_document" "event-asm" {
 
 data "aws_iam_policy_document" "event" {
   statement {
+    effect = "Allow"
+
     actions = [
-      "iam:PassRole",
-      "codepipeline:*"
+      "codepipeline:StartPipelineExecution"
     ]
 
-    resources = ["*"]
+    resources = [
+      aws_codepipeline.pipeline.arn
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "iam:PassRole"
+    ]
+
+    resources = [
+      aws_iam_role.pipeline.arn
+    ]
   }
 }
 
