@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: /image_tag
+    destination: /tmp
+hooks:
+  AfterInstall:
+    - location: scripts/pull_image.sh
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      runas: root
