@@ -4,5 +4,8 @@
 ### simple-ecr
 [![](./simple-ecr/image.png)](./simple-ecr/)
 
-### container-ec2
-[![](./container-ec2/image.png)](./container-ec2/)
+### ec2-bluegreen
+[![](./ec2-bluegreen/image.png)](./ec2-bluegreen/)
+
+### ecs-rolling
+[![](./ecs-rolling/image.png)](./ecs-rolling/)
