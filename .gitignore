@@ -38,3 +38,5 @@ terraform.rc
 
 **/tmp/*
 !**/tmp/.gitkeep
+
+builds/
