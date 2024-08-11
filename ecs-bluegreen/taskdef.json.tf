@@ -18,12 +18,7 @@ data "local_file" "taskdef" {
 
 resource "local_file" "taskdef" {
   content = replace(
-    jsonencode(merge(
-      jsondecode(data.local_file.taskdef.content),
-      {
-        
-      }
-    )),
+    data.local_file.taskdef.content,
     "/${aws_ecr_repository.repo.repository_url}:[^\"]+/",
     "<IMAGE1_NAME>"
   )
